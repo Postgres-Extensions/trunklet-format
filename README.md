@@ -53,9 +53,11 @@ super user and running:
 
     CREATE EXTENSION "trunklet-format";
 
-To update an existing 0.2.0 install, first create extension_drop, which 0.2.0
-did not require:
+To update an existing 0.2.0 install (PostgreSQL 12 or later), first update
+trunklet to 0.3.3 or later and create extension_drop, neither of which 0.2.0
+required:
 
+    ALTER EXTENSION trunklet UPDATE;
     CREATE EXTENSION extension_drop CASCADE;
     ALTER EXTENSION "trunklet-format" UPDATE;
 
