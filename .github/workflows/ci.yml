@@ -14,9 +14,8 @@ jobs:
   # all-checks-passed check would then never report and get stuck Pending in
   # branch protection.
   #
-  # Also derives the supported-PostgreSQL-major list the test job's matrix
-  # consumes, from a single pair of constants below, so adding or dropping a
-  # major is a one-line edit here instead of touching the matrix directly.
+  # Also derives the supported-PostgreSQL-major list for the test job's matrix
+  # (see the step below).
   changes:
     name: 🔍 Detect changes & derive PG matrix
     runs-on: ubuntu-latest
@@ -113,6 +112,10 @@ jobs:
         # to yes, PGXNTOOL_VERIFY_RESULTS_MODE to pgtap) and exits non-zero on
         # failure.
         run: make verify-results
+      - name: Test the update from 0.2.0 on PostgreSQL ${{ matrix.pg }}
+        # Same suite and expected output, but each test installs 0.2.0 and runs
+        # ALTER EXTENSION UPDATE (see TEST_LOAD_SOURCE in the Makefile).
+        run: make verify-results TEST_LOAD_SOURCE=update
 
   # A single stable check name for use as a required status check in branch
   # protection rules. Matrix jobs produce check names like "🐘 PostgreSQL 14"
