@@ -125,7 +125,7 @@ SELECT throws_ok(
   , '22004' -- null_value_not_allowed
   , 'SQL identifier format option ("I") not allowed with optional parameters'
 );
--- This is meant to ensure the DETAIL is correct, but it doesn't work on travis :(
+-- Disabled check that the DETAIL is correct
 /*
 SAVEPOINT a;
 \unset ON_ERROR_STOP
@@ -157,7 +157,7 @@ SELECT throws_ok(
       ORDER BY sn, opn
   ) specifier_test
 ;
--- This is meant to ensure the DETAIL is correct, but it doesn't work on travis :(
+-- Disabled check that the DETAIL is correct
 /*
 SAVEPOINT a;
 \unset ON_ERROR_STOP

@@ -73,7 +73,7 @@
     "X_comment": "Valid keys for 'prereqs' are configure, build, runtime, or test.",
     "X_comment": "Valid keys for 'requires' are requires, recommends, suggests, or conflicts.",
     "X_comment": "Requires JSONB, which was released in 9.4",
-    "X_comment": "PostgreSQL 12: extension_drop installs cat_tools >= 0.2.1, which resolves to cat_tools 0.3.0, and that requires 12",
+    "X_comment": "PostgreSQL 12: extension_drop pulls in cat_tools, and cat_tools >= 0.3.0 requires PostgreSQL 12",
     "X_comment": "extension_drop: 0.1.1 fixes bug with dependencies",
     "X_comment": "trunklet 0.3.3: the drop command uses template_language__remove(ignore_missing_functions), added in 0.3.3",
     "prereqs": {
