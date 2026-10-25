@@ -1,39 +1,23 @@
 \set ECHO none
 1..2
-WARNING:  01000: function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-LOCATION:  exec_stmt_raise, pl_exec.c:3897
-WARNING:  01000: function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-LOCATION:  exec_stmt_raise, pl_exec.c:3897
-WARNING:  01000: function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-LOCATION:  exec_stmt_raise, pl_exec.c:3897
-WARNING:  01000: function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-LOCATION:  exec_stmt_raise, pl_exec.c:3897
-WARNING:  01000: function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-LOCATION:  exec_stmt_raise, pl_exec.c:3897
-WARNING:  01000: function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-LOCATION:  exec_stmt_raise, pl_exec.c:3897
-WARNING:  01000: function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-LOCATION:  exec_stmt_raise, pl_exec.c:3897
-WARNING:  01000: function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-LOCATION:  exec_stmt_raise, pl_exec.c:3897
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
 
 ok 1 - verify search_path has not changed without cascade
-WARNING:  01000: function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-LOCATION:  exec_stmt_raise, pl_exec.c:3897
-WARNING:  01000: function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-LOCATION:  exec_stmt_raise, pl_exec.c:3897
-WARNING:  01000: function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-LOCATION:  exec_stmt_raise, pl_exec.c:3897
-WARNING:  01000: function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-LOCATION:  exec_stmt_raise, pl_exec.c:3897
-WARNING:  01000: function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-LOCATION:  exec_stmt_raise, pl_exec.c:3897
-WARNING:  01000: function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-LOCATION:  exec_stmt_raise, pl_exec.c:3897
-WARNING:  01000: function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-LOCATION:  exec_stmt_raise, pl_exec.c:3897
-WARNING:  01000: function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-LOCATION:  exec_stmt_raise, pl_exec.c:3897
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
 
 ok 2 - verify search_path has not changed with cascade
 # TRANSACTION INTENTIONALLY LEFT OPEN!

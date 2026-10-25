@@ -1,5 +1,9 @@
 -- Note: pgTap is loaded by setup.sql
 
+-- Terse: verbose output adds a LOCATION line (pl_exec.c line number) to trunklet's
+-- deprecation warning when the extension loads, which differs between PostgreSQL versions
+\set VERBOSITY terse
+
 -- Add any test dependency statements here
 --CREATE EXTENSION IF NOT EXISTS trunklet;
 DO $$ BEGIN
