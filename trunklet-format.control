@@ -1,5 +1,5 @@
 # trunklet-format extension
 comment = 'A format()-based template language for trunklet'
-default_version = '0.2.0'
+default_version = 'stable'
 relocatable = true
 requires = 'trunklet, extension_drop'
