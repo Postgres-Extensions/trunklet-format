@@ -75,23 +75,17 @@ jobs:
         id: pg
         run: |
           # SINGLE SOURCE OF TRUTH for the supported PostgreSQL majors. To add
-          # or drop a major, edit ONLY the constants and the 9.x tail below; the
-          # test job's matrix derives from them (adding the newest major is a
-          # one-line NEWEST bump). Do NOT hardcode a supported major in a job
-          # matrix.
+          # or drop a major, edit ONLY the constants below; the test job's
+          # matrix derives from them (adding the newest major is a one-line
+          # NEWEST bump). Do NOT hardcode a supported major in a job matrix.
           #
           #   NEWEST -- highest PostgreSQL major tested.
-          #   FLOOR  -- oldest integer major (10+) supported. Supported
-          #             versions older than that are the 9.x tail below. The
-          #             overall floor is 9.5, which trunklet requires (see
-          #             META.in.json).
+          #   FLOOR  -- oldest PostgreSQL major supported; keep it in sync
+          #             with the PostgreSQL build prereq in META.in.json.
           NEWEST=18
-          FLOOR=10
+          FLOOR=12
 
-          # seq can't express 9.x, so those majors are listed explicitly. When
-          # 9.x support is dropped, delete the tail and make this a plain
-          # `seq "$NEWEST" -1 "$FLOOR"` (FLOOR then becomes the overall floor).
-          supported="$(seq "$NEWEST" -1 "$FLOOR") 9.6 9.5"
+          supported="$(seq "$NEWEST" -1 "$FLOOR")"
 
           # Emit a JSON array for the test job's matrix to consume via
           # fromJSON.
