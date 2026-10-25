@@ -53,6 +53,12 @@ super user and running:
 
     CREATE EXTENSION "trunklet-format";
 
+To update an existing 0.2.0 install, first create extension_drop, which 0.2.0
+did not require:
+
+    CREATE EXTENSION extension_drop CASCADE;
+    ALTER EXTENSION "trunklet-format" UPDATE;
+
 If you want to install trunklet-format and all of its supporting objects into a specific
 schema, use the `PGOPTIONS` environment variable to specify the schema, like
 so:
