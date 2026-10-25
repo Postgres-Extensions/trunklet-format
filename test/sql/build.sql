@@ -5,7 +5,10 @@ BEGIN;
 \i test/deps.sql
 
 -- This is just an easy way to get the dependencies pulled in on 10.0+
+\set saved_verbosity :VERBOSITY
+\set VERBOSITY terse
 SELECT pg_temp._create();
+\set VERBOSITY :saved_verbosity
 DROP EXTENSION "trunklet-format";
 
 \i sql/trunklet-format.sql

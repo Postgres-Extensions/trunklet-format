@@ -12,10 +12,13 @@ SELECT plan(
 
 --SET client_min_messages = WARNING; -- Necessary due to CASCADE
 -- Drop-reload
+\set saved_verbosity :VERBOSITY
+\set VERBOSITY terse
 SELECT lives_ok(
     'SELECT pg_temp._create();'
     , 'Create extension'
 );
+\set VERBOSITY :saved_verbosity
 -- We assume this works, so test it...
 SELECT throws_ok(
   $throws$
@@ -34,10 +37,13 @@ SELECT lives_ok(
     'DROP EXTENSION "trunklet-format";'
     , 'Drop extension'
 );
+\set saved_verbosity :VERBOSITY
+\set VERBOSITY terse
 SELECT lives_ok(
     'SELECT pg_temp._create();'
     , 'Create extension'
 );
+\set VERBOSITY :saved_verbosity
 SET client_min_messages = NOTICE; -- Can switch back now that we're done creating extensions
 
 -- Drop with registered template
