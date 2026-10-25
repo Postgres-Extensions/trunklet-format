@@ -1,12 +1,12 @@
 \set ECHO none
-psql:test/load.sql:3: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-psql:test/load.sql:3: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-psql:test/load.sql:3: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-psql:test/load.sql:3: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-psql:test/load.sql:3: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-psql:test/load.sql:3: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-psql:test/load.sql:3: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
-psql:test/load.sql:3: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+psql:test/load.sql:5: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+psql:test/load.sql:5: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+psql:test/load.sql:5: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+psql:test/load.sql:5: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+psql:test/load.sql:5: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+psql:test/load.sql:5: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+psql:test/load.sql:5: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+psql:test/load.sql:5: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
 
 ok 1
 ok 2
@@ -26,14 +26,14 @@ ok 15 - test optional handling with L and text
 ok 16 - test optional handling with L and true
 ok 17 - threw 22004: SQL identifier format option ("I") not allowed with optional parameters
 ok 18 - threw Unexpected character "" in format specifier ""
-ok 19 - threw Unexpected character "a" in format specifier "a"
-ok 20 - threw Unexpected character "S" in format specifier "S"
-ok 21 - threw Unexpected character "i" in format specifier "i"
-ok 22 - threw Unexpected character "l" in format specifier "l"
-ok 23 - threw Unexpected character "" in format specifier "O"
-ok 24 - threw Unexpected character "a" in format specifier "Oa"
-ok 25 - threw Unexpected character "S" in format specifier "OS"
-ok 26 - threw Unexpected character "i" in format specifier "Oi"
+ok 19 - threw Unexpected character "" in format specifier "O"
+ok 20 - threw Unexpected character "a" in format specifier "a"
+ok 21 - threw Unexpected character "a" in format specifier "Oa"
+ok 22 - threw Unexpected character "S" in format specifier "S"
+ok 23 - threw Unexpected character "S" in format specifier "OS"
+ok 24 - threw Unexpected character "i" in format specifier "i"
+ok 25 - threw Unexpected character "i" in format specifier "Oi"
+ok 26 - threw Unexpected character "l" in format specifier "l"
 ok 27 - threw Unexpected character "l" in format specifier "Ol"
 ok 28 - Should throw exception like 'parameter "mia" not found'
 ok 29 - Should throw exception like 'parameter "mia" not found'

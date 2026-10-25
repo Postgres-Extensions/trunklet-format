@@ -93,6 +93,7 @@ This is the end.
 $$
 );
 
+-- Tests read from an explicitly ordered subquery or view so pgTAP test numbers don't depend on join order
 SELECT is(
       trunklet.process_language(
         'format'
@@ -110,13 +111,13 @@ SELECT is(
       ), 2 )
       , format( 'test optional handling with %s and %s', replace, j->>'value' )
     )
-  FROM unnest('{s,L}'::text[]) r(replace)
-    , (SELECT row_to_json(v) AS j FROM (VALUES
-      (to_json(1.1))
-      , (to_json(NULL::int))
-      , (to_json('text'::text))
-      , (to_json(true))
-    ) v(value) ) j
+  FROM (
+    SELECT replace, json_build_object('value', value) AS j
+      FROM unnest('{s,L}'::text[]) WITH ORDINALITY r(replace, rn)
+        , unnest(array[to_json(1.1), to_json(NULL::int), to_json('text'::text), to_json(true)])
+            WITH ORDINALITY v(value, vn)
+      ORDER BY rn, vn
+  ) optional_test
 ;
 
 SELECT throws_ok(
@@ -149,8 +150,12 @@ SELECT throws_ok(
       , optional || specifier
     )
   )
-  FROM unnest('{"",a,S,i,l}'::text[]) s(specifier)
-    , unnest('{"",O}'::text[]) o(optional)
+  FROM (
+    SELECT specifier, optional
+      FROM unnest('{"",a,S,i,l}'::text[]) WITH ORDINALITY s(specifier, sn)
+        , unnest('{"",O}'::text[]) WITH ORDINALITY o(optional, opn)
+      ORDER BY sn, opn
+  ) specifier_test
 ;
 -- This is meant to ensure the DETAIL is correct, but it doesn't work on travis :(
 /*
@@ -177,26 +182,25 @@ SELECT throws_like(
     )
     , 'parameter "mia" not found'
   )
-  FROM (VALUES
-        ('%mia%s ')
-      , (' %mia%s')
-      , (' %mia%s ')
-      , ('%mia%s')
-    ) input( input )
-  , (VALUES ('{"Moo":1}'), (NULL)
-    ) param( param )
-  , unnest('{s,I,L}'::text[]) u(replacement)
+  FROM (
+    SELECT input, param, replacement
+      FROM unnest(array['%mia%s ', ' %mia%s', ' %mia%s ', '%mia%s']) WITH ORDINALITY i(input, inn)
+        , unnest(array['{"Moo":1}', NULL]) WITH ORDINALITY p(param, pn)
+        , unnest('{s,I,L}'::text[]) WITH ORDINALITY u(replacement, un)
+      ORDER BY inn, pn, un
+  ) missing_param_test
 ;
 
 CREATE TEMP VIEW extract_test AS
   SELECT *
     FROM ( VALUES
-          ( '{s1}'::text[], '{ "s1": "string 1" }'::jsonb         , 'single string'::text )
-        , ( '{num}'       , '{ "num": 1.1 }'                      , 'number' )
-        , ( '{t,f,"null"}', '{ "t":true,"f":false,"null":null }'  , 'multiple' )
-        , ( '{num,bogus}' , '{ "num": 1.1 }'                      , 'num & bogus' )
-        , ( '{bogus}'     , NULL                                  , 'bogus' )
-      ) AS v( extract_list, expected, description )
+          ( 1, '{s1}'::text[], '{ "s1": "string 1" }'::jsonb         , 'single string'::text )
+        , ( 2, '{num}'       , '{ "num": 1.1 }'                      , 'number' )
+        , ( 3, '{t,f,"null"}', '{ "t":true,"f":false,"null":null }'  , 'multiple' )
+        , ( 4, '{num,bogus}' , '{ "num": 1.1 }'                      , 'num & bogus' )
+        , ( 5, '{bogus}'     , NULL                                  , 'bogus' )
+      ) AS v( pos, extract_list, expected, description )
+    ORDER BY pos
 ;
 
 SELECT is(
@@ -232,17 +236,16 @@ SELECT throws_ok(
       , j
     )
   )
-  FROM
-    unnest(array[
-        $$process_language('format', 'template', (%L::jsonb)->'value')$$
-      , $$extract_parameters('format', (%L::jsonb)->'value', '{a}'::text[])$$
-    ]) f(format)
-    , (SELECT row_to_json(v)::jsonb AS j FROM (VALUES
-      (to_json(1.1))
-      , (to_json('text'::text))
-      , (to_json(true))
-      , (to_json(array[1,2,3]))
-    ) v(value) ) j
+  FROM (
+    SELECT format, jsonb_build_object('value', value) AS j
+      FROM unnest(array[
+          $$process_language('format', 'template', (%L::jsonb)->'value')$$
+        , $$extract_parameters('format', (%L::jsonb)->'value', '{a}'::text[])$$
+      ]) WITH ORDINALITY f(format, fn)
+        , unnest(array[to_json(1.1), to_json('text'::text), to_json(true), to_json(array[1,2,3])])
+            WITH ORDINALITY v(value, vn)
+      ORDER BY fn, vn
+  ) non_object_test
 ;
 SELECT throws_ok(
     format(
@@ -253,12 +256,15 @@ SELECT throws_ok(
     , 'parameter names may not contain "%"'
     , format || ': parameter names may not contain "%"'
   )
-  FROM
-    unnest(array[
-        $$process_language('format', 'template', %L::jsonb)$$
-      , $$extract_parameters('format', %L::jsonb, '{a}'::text[])$$
-    ]) f(format)
-    , unnest('{% key,key %,k%k}'::text[]) k(key)
+  FROM (
+    SELECT format, key
+      FROM unnest(array[
+          $$process_language('format', 'template', %L::jsonb)$$
+        , $$extract_parameters('format', %L::jsonb, '{a}'::text[])$$
+      ]) WITH ORDINALITY f(format, fn)
+        , unnest('{% key,key %,k%k}'::text[]) WITH ORDINALITY k(key, kn)
+      ORDER BY fn, kn
+  ) bad_key_test
 ;
 SELECT throws_ok(
     format(
@@ -267,15 +273,15 @@ SELECT throws_ok(
     )
     , format( '%s is not supported as a parameter type', jsonb_typeof(j->'value') )
   )
-  FROM
-    unnest(array[
-        $$process_language('format', 'template', %L::jsonb)$$
-      , $$extract_parameters('format', %L::jsonb, '{a}'::text[])$$
-    ]) f(format)
-    , (SELECT row_to_json(v)::jsonb AS j FROM (VALUES
-      ('{"key":"value"}'::json)
-      , (to_json(array[1,2,3]))
-    ) v(value) ) j
+  FROM (
+    SELECT format, jsonb_build_object('value', value) AS j
+      FROM unnest(array[
+          $$process_language('format', 'template', %L::jsonb)$$
+        , $$extract_parameters('format', %L::jsonb, '{a}'::text[])$$
+      ]) WITH ORDINALITY f(format, fn)
+        , unnest(array['{"key":"value"}'::json, to_json(array[1,2,3])]) WITH ORDINALITY v(value, vn)
+      ORDER BY fn, vn
+  ) bad_type_test
 ;
 
 \i test/pgxntool/finish.sql
