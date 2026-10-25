@@ -6,7 +6,7 @@ BEGIN
   IF v_version ~ '^[0-9]+(\.[0-9]+)*$' AND string_to_array(v_version, '.')::int[] < '{0,3,3}' THEN
     RAISE EXCEPTION 'trunklet >= 0.3.3 required; found %', v_version
       USING ERRCODE = 'object_not_in_prerequisite_state'
-        , HINT = 'Update trunklet to 0.3.3 or later first.'
+        , HINT = 'On trunklet 0.2.1 or later, run ALTER EXTENSION trunklet UPDATE first. trunklet 0.2.0 has no update path; see the trunklet-format README.'
     ;
   END IF;
 END
