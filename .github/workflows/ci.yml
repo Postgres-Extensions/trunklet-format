@@ -112,9 +112,9 @@ jobs:
         # to yes, PGXNTOOL_VERIFY_RESULTS_MODE to pgtap) and exits non-zero on
         # failure.
         run: make verify-results
-      - name: Test the update from 0.2.0 on PostgreSQL ${{ matrix.pg }}
-        # Same suite and expected output, but each test installs 0.2.0 and runs
-        # ALTER EXTENSION UPDATE (see TEST_LOAD_SOURCE in the Makefile).
+      - name: Test the update path on PostgreSQL ${{ matrix.pg }}
+        # Same suite and expected output, but each test installs the Makefile's
+        # TEST_UPDATE_FROM version and runs ALTER EXTENSION UPDATE.
         run: make verify-results TEST_LOAD_SOURCE=update
 
   # A single stable check name for use as a required status check in branch

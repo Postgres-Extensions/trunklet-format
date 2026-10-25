@@ -48,7 +48,7 @@ You need to run the test suite using a super user, such as the default
     make installcheck PGUSER=postgres
 
 Once trunklet-format is installed, you can add it to a database. If you're running
-PostgreSQL 9.1.0 or greater, it's a simple as connecting to a database as a
+PostgreSQL 12 or greater, it's a simple as connecting to a database as a
 super user and running:
 
     CREATE EXTENSION "trunklet-format";
