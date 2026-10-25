@@ -1,3 +1,17 @@
+-- The drop command below needs trunklet 0.3.3 (ignore_missing_functions); a non-numeric version such as stable passes
+DO $$
+DECLARE
+  v_version CONSTANT text := (SELECT extversion FROM pg_catalog.pg_extension WHERE extname = 'trunklet');
+BEGIN
+  IF v_version ~ '^[0-9]+(\.[0-9]+)*$' AND string_to_array(v_version, '.')::int[] < '{0,3,3}' THEN
+    RAISE EXCEPTION 'trunklet >= 0.3.3 required; found %', v_version
+      USING ERRCODE = 'object_not_in_prerequisite_state'
+        , HINT = 'Update trunklet to 0.3.3 or later first.'
+    ;
+  END IF;
+END
+$$;
+
 /*
  * 0.2.0 could not be dropped. Register the same drop command the install
  * script does; this is why extension_drop is now a required extension.
