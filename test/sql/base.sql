@@ -13,6 +13,19 @@ CREATE TABLE process(
 -- Protect against infinite loops
 SET statement_timeout = '2 s';
 SELECT no_plan();
+-- Returns the DETAIL of the error raised by processing the template, or NULL if none.
+CREATE FUNCTION pg_temp.error_detail(template text) RETURNS text LANGUAGE plpgsql AS $$
+DECLARE
+  v_detail text;
+BEGIN
+  PERFORM trunklet.process_language( 'format', template, NULL::json );
+  RETURN NULL;
+EXCEPTION WHEN others THEN
+  GET STACKED DIAGNOSTICS v_detail = PG_EXCEPTION_DETAIL;
+  RETURN v_detail;
+END
+$$;
+
 SELECT is(
   trunklet.process_language(
     'format'
@@ -125,18 +138,6 @@ SELECT throws_ok(
   , '22004' -- null_value_not_allowed
   , 'SQL identifier format option ("I") not allowed with optional parameters'
 );
--- This is meant to ensure the DETAIL is correct, but it doesn't work on travis :(
-/*
-SAVEPOINT a;
-\unset ON_ERROR_STOP
-\set VERBOSITY default
-\echo THIS ERROR IS OK!
-SELECT 'DETAIL:  parameter "test parameter" at template position ' || strpos( 'some stuff%test parameter%OIsome more stuff', '%' );
-SELECT trunklet.process_language( 'format', 'some stuff%test parameter%OIsome more stuff', NULL::json );
-ROLLBACK TO a;
-\set ON_ERROR_STOP 1
-\set VERBOSITY VERBOSE
-*/
 
 SELECT throws_ok(
     format(
@@ -157,22 +158,17 @@ SELECT throws_ok(
       ORDER BY sn, opn
   ) specifier_test
 ;
--- This is meant to ensure the DETAIL is correct, but it doesn't work on travis :(
-/*
-SAVEPOINT a;
-\unset ON_ERROR_STOP
-\set VERBOSITY default
-\echo THIS ERROR IS OK!
-SELECT 'DETAIL:  parameter "Moo" at template position ' || strpos( 'more%Moo%OSmore', '%' );
-SELECT trunklet.process_language('format', 'more%Moo%OSmore', NULL::json);
-ROLLBACK TO a;
-\echo THIS ERROR IS OK!
-SELECT 'DETAIL:  parameter "Moo" at template position ' || strpos( 'more%Moo%OSmore', '%' );
-SELECT trunklet.process_language('format', 'more%Moo%lmore', NULL::json);
-ROLLBACK TO a;
-\set ON_ERROR_STOP 1
-\set VERBOSITY VERBOSE
-*/
+SELECT is(
+  pg_temp.error_detail(t)
+  , 'parameter "' || parameter || '" at template position ' || strpos( t, '%' )
+  , format( 'DETAIL for %L', t )
+)
+  FROM (VALUES
+    (1, 'some stuff%test parameter%OIsome more stuff', 'test parameter')
+    , (2, 'more%Moo%OSmore', 'Moo')
+    , (3, 'more%Moo%lmore', 'Moo')
+  ) v(n, t, parameter)
+  ORDER BY n;
 
 SELECT throws_like(
     format(

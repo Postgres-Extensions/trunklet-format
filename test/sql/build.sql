@@ -4,7 +4,7 @@
 BEGIN;
 \i test/deps.sql
 
--- This is just an easy way to get the dependencies pulled in on 10.0+
+-- This is just an easy way to get the dependencies pulled in
 \set saved_verbosity :VERBOSITY
 \set VERBOSITY terse
 SELECT pg_temp._create();
