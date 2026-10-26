@@ -13,6 +13,19 @@ CREATE TABLE process(
 -- Protect against infinite loops
 SET statement_timeout = '2 s';
 SELECT no_plan();
+-- Returns the DETAIL of the error raised by processing the template, or NULL if none.
+CREATE FUNCTION pg_temp.error_detail(template text) RETURNS text LANGUAGE plpgsql AS $$
+DECLARE
+  v_detail text;
+BEGIN
+  PERFORM trunklet.process_language( 'format', template, NULL::json );
+  RETURN NULL;
+EXCEPTION WHEN others THEN
+  GET STACKED DIAGNOSTICS v_detail = PG_EXCEPTION_DETAIL;
+  RETURN v_detail;
+END
+$$;
+
 SELECT is(
   trunklet.process_language(
     'format'
@@ -125,27 +138,6 @@ SELECT throws_ok(
   , '22004' -- null_value_not_allowed
   , 'SQL identifier format option ("I") not allowed with optional parameters'
 );
-CREATE FUNCTION pg_temp.error_detail(sql text) RETURNS text LANGUAGE plpgsql AS $$
-DECLARE
-  v_detail text;
-BEGIN
-  EXECUTE sql;
-  RETURN NULL;
-EXCEPTION WHEN others THEN
-  GET STACKED DIAGNOSTICS v_detail = PG_EXCEPTION_DETAIL;
-  RETURN v_detail;
-END
-$$;
-
-SELECT is(
-  pg_temp.error_detail( format(
-    $$SELECT trunklet.process_language( 'format', %L, NULL::json )$$
-    , t
-  ) )
-  , 'parameter "test parameter" at template position ' || strpos( t, '%' )
-  , 'DETAIL for optional SQL identifier error'
-)
-  FROM (SELECT 'some stuff%test parameter%OIsome more stuff'::text AS t) x;
 
 SELECT throws_ok(
     format(
@@ -167,14 +159,15 @@ SELECT throws_ok(
   ) specifier_test
 ;
 SELECT is(
-  pg_temp.error_detail( format(
-    $$SELECT trunklet.process_language( 'format', %L, NULL::json )$$
-    , t
-  ) )
-  , 'parameter "Moo" at template position ' || strpos( t, '%' )
-  , format( 'DETAIL for unexpected format character in %L', t )
+  pg_temp.error_detail(t)
+  , 'parameter "' || parameter || '" at template position ' || strpos( t, '%' )
+  , format( 'DETAIL for %L', t )
 )
-  FROM unnest('{more%Moo%OSmore,more%Moo%lmore}'::text[]) WITH ORDINALITY u(t, n)
+  FROM (VALUES
+    (1, 'some stuff%test parameter%OIsome more stuff', 'test parameter')
+    , (2, 'more%Moo%OSmore', 'Moo')
+    , (3, 'more%Moo%lmore', 'Moo')
+  ) v(n, t, parameter)
   ORDER BY n;
 
 SELECT throws_like(
