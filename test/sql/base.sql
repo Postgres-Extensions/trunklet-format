@@ -125,18 +125,27 @@ SELECT throws_ok(
   , '22004' -- null_value_not_allowed
   , 'SQL identifier format option ("I") not allowed with optional parameters'
 );
--- Disabled check that the DETAIL is correct
-/*
-SAVEPOINT a;
-\unset ON_ERROR_STOP
-\set VERBOSITY default
-\echo THIS ERROR IS OK!
-SELECT 'DETAIL:  parameter "test parameter" at template position ' || strpos( 'some stuff%test parameter%OIsome more stuff', '%' );
-SELECT trunklet.process_language( 'format', 'some stuff%test parameter%OIsome more stuff', NULL::json );
-ROLLBACK TO a;
-\set ON_ERROR_STOP 1
-\set VERBOSITY VERBOSE
-*/
+CREATE FUNCTION pg_temp.error_detail(sql text) RETURNS text LANGUAGE plpgsql AS $$
+DECLARE
+  v_detail text;
+BEGIN
+  EXECUTE sql;
+  RETURN NULL;
+EXCEPTION WHEN others THEN
+  GET STACKED DIAGNOSTICS v_detail = PG_EXCEPTION_DETAIL;
+  RETURN v_detail;
+END
+$$;
+
+SELECT is(
+  pg_temp.error_detail( format(
+    $$SELECT trunklet.process_language( 'format', %L, NULL::json )$$
+    , t
+  ) )
+  , 'parameter "test parameter" at template position ' || strpos( t, '%' )
+  , 'DETAIL for optional SQL identifier error'
+)
+  FROM (SELECT 'some stuff%test parameter%OIsome more stuff'::text AS t) x;
 
 SELECT throws_ok(
     format(
@@ -157,22 +166,16 @@ SELECT throws_ok(
       ORDER BY sn, opn
   ) specifier_test
 ;
--- Disabled check that the DETAIL is correct
-/*
-SAVEPOINT a;
-\unset ON_ERROR_STOP
-\set VERBOSITY default
-\echo THIS ERROR IS OK!
-SELECT 'DETAIL:  parameter "Moo" at template position ' || strpos( 'more%Moo%OSmore', '%' );
-SELECT trunklet.process_language('format', 'more%Moo%OSmore', NULL::json);
-ROLLBACK TO a;
-\echo THIS ERROR IS OK!
-SELECT 'DETAIL:  parameter "Moo" at template position ' || strpos( 'more%Moo%OSmore', '%' );
-SELECT trunklet.process_language('format', 'more%Moo%lmore', NULL::json);
-ROLLBACK TO a;
-\set ON_ERROR_STOP 1
-\set VERBOSITY VERBOSE
-*/
+SELECT is(
+  pg_temp.error_detail( format(
+    $$SELECT trunklet.process_language( 'format', %L, NULL::json )$$
+    , t
+  ) )
+  , 'parameter "Moo" at template position ' || strpos( t, '%' )
+  , format( 'DETAIL for unexpected format character in %L', t )
+)
+  FROM unnest('{more%Moo%OSmore,more%Moo%lmore}'::text[]) WITH ORDINALITY u(t, n)
+  ORDER BY n;
 
 SELECT throws_like(
     format(
