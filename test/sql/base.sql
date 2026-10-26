@@ -93,7 +93,6 @@ This is the end.
 $$
 );
 
--- Tests read from an explicitly ordered subquery or view so pgTAP test numbers don't depend on join order
 SELECT is(
       trunklet.process_language(
         'format'
@@ -116,6 +115,7 @@ SELECT is(
       FROM unnest('{s,L}'::text[]) WITH ORDINALITY r(replace, rn)
         , unnest(array[to_json(1.1), to_json(NULL::int), to_json('text'::text), to_json(true)])
             WITH ORDINALITY v(value, vn)
+      -- Ensure consistent ordering against planner changes
       ORDER BY rn, vn
   ) optional_test
 ;
