@@ -53,6 +53,18 @@ super user and running:
 
     CREATE EXTENSION "trunklet-format";
 
+Updating an existing trunklet-format 0.2.0 install (PostgreSQL 12 or later)
+requires trunklet >= 0.3.3 and extension_drop, neither of which 0.2.0 required.
+If you are on trunklet 0.2.1 or later, run:
+
+    ALTER EXTENSION trunklet UPDATE;
+    CREATE EXTENSION extension_drop CASCADE;
+    ALTER EXTENSION "trunklet-format" UPDATE;
+
+trunklet 0.2.0 has no update path to later versions: drop and recreate it (this
+also drops trunklet-format and any trunklet data), then install trunklet-format
+at the stable version.
+
 If you want to install trunklet-format and all of its supporting objects into a specific
 schema, use the `PGOPTIONS` environment variable to specify the schema, like
 so:

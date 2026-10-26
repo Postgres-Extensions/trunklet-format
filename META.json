@@ -16,7 +16,7 @@
     "name": "trunklet-format",
 
     "X_comment": "REQUIRED. Version of the distribution. http://pgxn.org/spec/#version",
-    "version": "0.2.0",
+    "version": "stable",
 
     "X_comment": "REQUIRED. Short description of distribution.",
     "abstract": "A format()-based template language for trunklet",
@@ -41,7 +41,7 @@
             "file": "sql/trunklet-format.sql",
 
             "X_comment": "REQUIRED. Version the extension is at.",
-            "version": "0.2.0",
+            "version": "stable",
 
             "X_comment": "Optional: \"abstract\": Description of the extension.",
             "abstract": "A format()-based template language for trunklet",
@@ -75,20 +75,20 @@
     "X_comment": "Requires JSONB, which was released in 9.4",
     "X_comment": "trunklet currently requires 9.5",
     "X_comment": "extension_drop: 0.1.1 fixes bug with dependencies",
-    "X_comment": "Requires support for droping a language in trunklet; released in 0.3.0",
+    "X_comment": "trunklet 0.3.3: the drop command uses template_language__remove(ignore_missing_functions), added in 0.3.3",
     "prereqs": {
 
         "build": {
             "requires": {
                 "PostgreSQL": "9.5.0",
                 "extension_drop": ">= 0.1.1",
-                "trunklet": ">= 0.3.0"
+                "trunklet": ">= 0.3.3"
             }
         },
         "runtime": {
             "requires": {
                 "plpgsql": 0,
-                "trunklet": ">= 0.2.0"
+                "trunklet": ">= 0.3.3"
             }
         },
         "test": {
