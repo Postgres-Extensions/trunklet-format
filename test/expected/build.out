@@ -1,4 +1,12 @@
 \set ECHO none
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
  _create 
 ---------
  

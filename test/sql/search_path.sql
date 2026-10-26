@@ -13,7 +13,10 @@ CREATE TEMP TABLE before AS
   SELECT current_setting('search_path')
 ;
 
+\set saved_verbosity :VERBOSITY
+\set VERBOSITY terse
 SELECT pg_temp._create();
+\set VERBOSITY :saved_verbosity
 
 CREATE TEMP TABLE after AS
   SELECT current_setting('search_path')
@@ -34,7 +37,10 @@ CREATE TEMP TABLE before AS
   SELECT current_setting('search_path')
 ;
 
+\set saved_verbosity :VERBOSITY
+\set VERBOSITY terse
 SELECT pg_temp._create();
+\set VERBOSITY :saved_verbosity
 
 CREATE TEMP TABLE after AS
   SELECT current_setting('search_path')

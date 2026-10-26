@@ -1,4 +1,12 @@
 \set ECHO none
+psql:test/load.sql:5: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+psql:test/load.sql:5: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+psql:test/load.sql:5: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+psql:test/load.sql:5: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+psql:test/load.sql:5: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+psql:test/load.sql:5: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+psql:test/load.sql:5: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+psql:test/load.sql:5: WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
 
 ok 1
 ok 2

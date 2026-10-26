@@ -1,5 +1,13 @@
 \set ECHO none
 1..8
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
+WARNING:  function__arg_types_text() is deprecated, use routine__parse_arg_types_text instead
 ok 1 - Create extension
 ok 2 - A second extension_drop__add() call fails
 ok 3 - Drop extension
